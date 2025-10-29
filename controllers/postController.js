@@ -90,27 +90,15 @@ function update(req, res) {
 }
 
 function destroy(req, res) {
+    // recuperiamo l'id dall' URL 
+    const { id } = req.params;
+    const sql = 'DELETE FROM posts WHERE id = ?'
 
-    // rendo l'id un numero intero e lo salvo
-    const id = parseInt(req.params.id)
-
-    // cerco il post tramite l'id 
-    const post = posts.find(e => e.id === id);
-
-    // condizione se il post viene trovato o no
-    if (posts) {
-
-        // elimino il post
-        posts.splice(posts.indexOf(post), 1)
-            ;
-        // stampo la lista aggiornata
-        console.log(posts);
-
-        // cambio dello stato
+    //Eliminiamo il post                       
+    connection.query(sql, [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Failed to delete post' });
         res.sendStatus(204)
-    } else {
-        res.status(404).json({ message: "error, post non trovato" })
-    }
+    });
 }
 
 // esporto tutto
