@@ -7,7 +7,7 @@ const connection = require('../data/db');
 // setto le funzioni che andranno nelle rotte
 
 function index(req, res) {
-   // prepariamo la query
+    // prepariamo la query
     const sql = 'SELECT * FROM posts';
 
     // eseguiamo la query!
@@ -18,20 +18,16 @@ function index(req, res) {
 }
 
 function show(req, res) {
-    // rendo l'id un numero intero e lo salvo
-    const id = parseInt(req.params.id);
+    // recuperiamo l'id dall' URL
+    const id = req.params.id;
 
-    // cerco il post tramite l'id 
-    const post = posts.find((e) => e.id === id)
+    const sql = 'SELECT * FROM posts WHERE id = ?';
+    connection.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database query failed' });
+        if (results.length === 0) return res.status(404).json({ error: 'Post not found' });
+        res.json(results[0]);
+    });
 
-    // condizione se il post viene trovato o no
-    if (post) {
-
-        // restituisco la lista
-        res.json(post);
-    } else {
-        res.status(404).json({ message: "error, post non trovato" })
-    }
 }
 
 function store(req, res) {
