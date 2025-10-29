@@ -1,26 +1,20 @@
 // importo l'array con i posts
 const posts = require('../data/postsArray');
 
+// Importo il file di connessione al database
+const connection = require('../data/db');
 
 // setto le funzioni che andranno nelle rotte
 
 function index(req, res) {
-    // res.json(posts);
+   // prepariamo la query
+    const sql = 'SELECT * FROM posts';
 
-    // setto l'array di post su una variabile di appoggio
-    let filteredPosts = posts;
-
-    // condizione se il tags esiste
-    if (req.query.tags) {
-
-        // filtro i post che includono il tag cercato
-        filteredPosts = posts.filter(
-            post => post.tags.includes(req.query.tags)
-        );
-    }
-
-    // restituisco la variabile filteredPosts
-    res.json(filteredPosts);
+    // eseguiamo la query!
+    connection.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Database query failed' });
+        res.json(results);
+    });
 }
 
 function show(req, res) {

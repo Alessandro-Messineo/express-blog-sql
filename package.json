@@ -1,7 +1,7 @@
 {
   "name": "express-blog-api-crud",
   "version": "1.0.0",
-  "description": "esercizio blog crud",
+  "description": "esercizio blog sql",
   "license": "ISC",
   "author": "alessandro messineo",
   "type": "commonjs",
